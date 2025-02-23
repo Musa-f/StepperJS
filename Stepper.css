@@ -1,0 +1,124 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F4F6F8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#stepper-container {
+    width: 60%;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stepper-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stepper-header button, .step {
+    position: relative;
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 5px;
+    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 10% 50%);
+    background-color: #d2e0f7;
+    color: #889bbb;
+    border: none;
+}
+
+.step:first-child {
+    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
+}
+.step:last-child {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 10% 50%);
+}
+
+.stepper-header .step-active {
+    background-color: #6E94CF; 
+    color: #28487B;
+}
+
+.step.step-done:hover{
+    background-color: #abbcd6;
+    color: white;
+    cursor: pointer;
+}
+
+.stepper-body {
+    display: grid;
+}
+
+.stepper-body .form-group-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    margin-top: 20px;
+}
+
+.stepper-body .form-group{
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.stepper-body .form-group label {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: white;
+    padding: 0 5px;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.stepper-body input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+    box-sizing: border-box;
+}
+
+.stepper-body input:focus {
+    border-color: #5c80b6;
+}
+
+.stepper-footer{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.stepper-footer button {
+    font-weight: 600;
+    padding: 15px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: none;
+}
+
+.stepper-footer .btn-cancel {
+    background: #b9cdee;
+    color: #28487B;
+}
+
+.btn-next{
+    background: #28487B;
+    color: #ffff;
+}
+
+.form-message{
+    margin: 10px 0px;
+    color: rgb(189, 34, 34);
+}
