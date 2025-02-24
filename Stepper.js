@@ -2,6 +2,7 @@ class Stepper {
     constructor(stepCount) {
         this.stepCount = stepCount;
         this.currentStep = 0;
+        this.maxStepReached = 0;
         this.steps = [];
         this.data = {};
         this.container = document.querySelector('#stepper-container');
@@ -34,17 +35,23 @@ class Stepper {
         this.header.innerHTML = '';
         for (let i = 0; i < this.steps.length; i++) {
             const stepBtn = document.createElement('button');
-            stepBtn.className = `step ${i === 0 ? 'step-active' : ''}`;
+            stepBtn.className = `step ${i === this.currentStep ? 'step-active' : ''}`;
             stepBtn.dataset.step = i;
             stepBtn.innerText = this.steps[i].title;
-            stepBtn.addEventListener('click', () => {
-                if (i < this.currentStep) {
-                    this.goToStep(i);
-                }
-            });
+            
+            //FIXME: maxStepReached non correct
+            if (i <= this.maxStepReached) { 
+                stepBtn.addEventListener('click', () => this.goToStep(i));
+                stepBtn.classList.add('step-clickable');
+                stepBtn.disabled = false;
+            } else {
+                stepBtn.disabled = true; 
+            }
+    
             this.header.appendChild(stepBtn);
         }
     }
+       
 
     add(title, formFields) {
         if (this.steps.length >= this.stepCount) {
@@ -59,28 +66,59 @@ class Stepper {
 
     renderStep(index) {
         const step = this.steps[index];
-    
+
         const existingForm = this.body.querySelector('.form-group-container');
         if (existingForm) {
             existingForm.remove();
         }
-    
+
         const form = document.createElement('div');
         form.className = 'form-group-container';
-        
+
         Object.entries(step.formFields).forEach(([label, options]) => {
             const fieldGroup = document.createElement('div');
             fieldGroup.className = 'form-group';
+
+            const inputElement = this.formatInput(label, options);
             fieldGroup.innerHTML = `
                 <label>${label}${options.required ? ' *' : ''}</label>
-                <input type="${options.type}" name="${label}" value="${this.data[label] || ''}" ${options.required ? 'required' : ''}>
             `;
+            fieldGroup.appendChild(inputElement);
             form.appendChild(fieldGroup);
         });
-    
+
         this.body.appendChild(form);
     }
-        
+
+    formatInput(name, options) {
+        let input;
+
+        if (options.type == "textarea") {
+            input = document.createElement("textarea");
+            input.value = this.data[name] || ""; 
+        } 
+        else if (options.type == "select") {
+            input = document.createElement("select");
+            (options.choices || []).forEach(choice => {
+                const option = document.createElement("option");
+                option.value = choice;
+                option.innerText = choice;
+                if (this.data[name] === choice) {
+                    option.selected = true; 
+                }
+                input.appendChild(option);
+            });
+        } else {
+            input = document.createElement("input");
+            input.type = options.type || "text"; 
+            input.value = this.data[name] || ""; 
+        }
+    
+        input.name = name;
+        if (options.required) input.setAttribute("required", true);
+    
+        return input;
+    }       
 
     showMessage(text) {
         this.messageBox.innerHTML = text;
@@ -95,6 +133,11 @@ class Stepper {
         this.showMessage('');
         this.saveData();
         this.header.querySelectorAll('.step')[this.currentStep].classList.add('step-done');
+
+        if (this.currentStep >= this.maxStepReached) {
+            this.maxStepReached = this.currentStep + 1;
+        }
+        
         if (this.currentStep < this.steps.length - 1) {
             this.currentStep++;
             this.updateUI();
@@ -115,6 +158,7 @@ class Stepper {
     }
 
     goToStep(index) {
+        if (index > this.maxStepReached) return;
         this.saveData();
         this.currentStep = index;
         this.updateUI();
@@ -141,23 +185,27 @@ const stepper = new Stepper(4);
 
 let form1 = { 
     'Full Name': { type: 'text', required: 1 }, 
-    'Age': { type: 'number', required: 0 } 
+    'Age': { type: 'number' } 
 };
 
 let form2 = { 
     'Email Address': { type: 'email', required: 1 }, 
-    'Phone Number': { type: 'tel', required: 0 } 
+    'Phone Number': { type: 'tel'} 
 };
 
 let form3 = { 
     'Street Address': { type: 'text', required: 1 }, 
-    'City': { type: 'text', required: 1 }, 
-    'ZIP Code': { type: 'number', required: 0 } 
+    'City': { 
+        type: 'select', 
+        choices : ['Paris', 'Marseille', 'Toulon'],
+        required: 1 
+    }, 
+    'ZIP Code': { type: 'number' } 
 };
 
 let form4 = { 
-    'Feedback': { type: 'textarea', required: 0 }, 
-    'Would you recommend us?': { type: 'radio', required: 0 } 
+    'Feedback': { type: 'textarea' }, 
+    'Would you recommend us?': { type: 'radio' },
 };
 
 
@@ -166,6 +214,8 @@ stepper.add('Contact Details', form2);
 stepper.add('Address Information', form3);
 stepper.add('Survey', form4);
 
-//TODO: Gérer les multiselect dans le formulaire
+
 //TODO: Faire la partie suppression du formulaire
 //TODO: Test avec fetch des données
+
+//diviser en sous classes : classe UI, classe gestion erreur, la classe principale ne garde que les fonctions qui sont utilisés lors de l'instanciation

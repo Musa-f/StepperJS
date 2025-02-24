@@ -46,7 +46,7 @@ body {
     color: #28487B;
 }
 
-.step.step-done:hover{
+.step.step-done:hover {
     background-color: #abbcd6;
     color: white;
     cursor: pointer;
@@ -56,14 +56,14 @@ body {
     display: grid;
 }
 
-.stepper-body .form-group-container{
+.stepper-body .form-group-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 10px;
     margin-top: 20px;
 }
 
-.stepper-body .form-group{
+.stepper-body .form-group {
     position: relative;
     width: 100%;
     margin-bottom: 10px;
@@ -79,7 +79,9 @@ body {
     font-size: 12px;
 }
 
-.stepper-body input {
+.stepper-body input,
+.stepper-body textarea,
+.stepper-body select {
     width: 100%;
     padding: 10px;
     border: 1px solid #cbd5e1;
@@ -87,13 +89,28 @@ body {
     outline: none;
     transition: 0.3s;
     box-sizing: border-box;
+    font-family: inherit;
 }
 
-.stepper-body input:focus {
+.stepper-body input:focus,
+.stepper-body textarea:focus,
+.stepper-body select:focus {
     border-color: #5c80b6;
 }
 
-.stepper-footer{
+.stepper-body textarea {
+    resize: vertical; 
+    min-height: 100px;
+}
+
+.stepper-body select {
+    appearance: none; 
+    background-color: white;
+    cursor: pointer;
+}
+
+/* Style des boutons */
+.stepper-footer {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
@@ -113,12 +130,12 @@ body {
     color: #28487B;
 }
 
-.btn-next{
+.btn-next {
     background: #28487B;
-    color: #ffff;
+    color: #ffffff;
 }
 
-.form-message{
+.form-message {
     margin: 10px 0px;
     color: rgb(189, 34, 34);
 }
