@@ -38,20 +38,10 @@ class Stepper {
             stepBtn.className = `step ${i === this.currentStep ? 'step-active' : ''}`;
             stepBtn.dataset.step = i;
             stepBtn.innerText = this.steps[i].title;
-            
-            //FIXME: maxStepReached non correct
-            if (i <= this.maxStepReached) { 
-                stepBtn.addEventListener('click', () => this.goToStep(i));
-                stepBtn.classList.add('step-clickable');
-                stepBtn.disabled = false;
-            } else {
-                stepBtn.disabled = true; 
-            }
     
             this.header.appendChild(stepBtn);
         }
-    }
-       
+    }  
 
     add(title, formFields) {
         if (this.steps.length >= this.stepCount) {
@@ -93,9 +83,12 @@ class Stepper {
     formatInput(name, options) {
         let input;
 
+        const defaultValue = name.toLowerCase().replace(/\s+/g, '_');
+        const value = options.value || defaultValue;
+
         if (options.type == "textarea") {
             input = document.createElement("textarea");
-            input.value = this.data[name] || ""; 
+            input.value = this.data[value] || "";
         } 
         else if (options.type == "select") {
             input = document.createElement("select");
@@ -111,10 +104,10 @@ class Stepper {
         } else {
             input = document.createElement("input");
             input.type = options.type || "text"; 
-            input.value = this.data[name] || ""; 
+            input.value = this.data[value] || "";
         }
     
-        input.name = name;
+        input.name = value;
         if (options.required) input.setAttribute("required", true);
     
         return input;
@@ -130,14 +123,16 @@ class Stepper {
             this.showMessage('Please fill all required fields.');
             return;
         }
+        this.maxStepReached++;
         this.showMessage('');
         this.saveData();
-        this.header.querySelectorAll('.step')[this.currentStep].classList.add('step-done');
 
-        if (this.currentStep >= this.maxStepReached) {
-            this.maxStepReached = this.currentStep + 1;
+        if (this.currentStep <= this.maxStepReached) {
+            const btn = this.header.querySelectorAll('.step')[this.currentStep];
+            btn.classList.add('step-done');
+            btn.addEventListener('click', () => this.goToStep(btn.dataset.step));
         }
-        
+    
         if (this.currentStep < this.steps.length - 1) {
             this.currentStep++;
             this.updateUI();
@@ -146,6 +141,7 @@ class Stepper {
             alert('Form submitted!');
         }
     }
+    
 
     validateStep() {
         const inputs = this.body.querySelectorAll('input[required]');
@@ -158,6 +154,7 @@ class Stepper {
     }
 
     goToStep(index) {
+        console.log("index: " + index);
         if (index > this.maxStepReached) return;
         this.saveData();
         this.currentStep = index;
@@ -166,8 +163,12 @@ class Stepper {
 
     updateUI() {
         this.header.querySelectorAll('.step').forEach((btn, i) => {
-            btn.classList.toggle('step-active', i === this.currentStep);
+            if(i == this.currentStep)
+                this.header.querySelectorAll('.step')[i].classList.add('step-active');
+            else
+                this.header.querySelectorAll('.step')[i].classList.remove('step-active');
         });
+        
         this.renderStep(this.currentStep);
         this.nextBtn.innerText = this.currentStep === this.steps.length - 1 ? 'Submit' : 'Next';
     }
@@ -184,7 +185,7 @@ class Stepper {
 const stepper = new Stepper(4);
 
 let form1 = { 
-    'Full Name': { type: 'text', required: 1 }, 
+    'Full Name': { type: 'text', value: 'name', required: 1 }, 
     'Age': { type: 'number' } 
 };
 
