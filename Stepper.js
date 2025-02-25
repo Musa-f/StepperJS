@@ -154,7 +154,10 @@ class Stepper {
     }
 
     goToStep(index) {
-        console.log("index: " + index);
+        if (!this.validateStep()) {
+            this.showMessage('Please fill all required fields.');
+            return;
+        }
         if (index > this.maxStepReached) return;
         this.saveData();
         this.currentStep = index;
