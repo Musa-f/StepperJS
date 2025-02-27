@@ -7,6 +7,10 @@ export class Stepper {
         this.maxStepReached = 0;
         this.steps = [];
         this.data = {};
+        this.formCompleted = false;
+        this.formCompletedPromise  = new Promise(resolve => {
+            this.resolveForm = resolve;
+        });
         
         const container = document.querySelector('#stepper-container');
         this.ui = new UI(container);
@@ -14,6 +18,13 @@ export class Stepper {
         this.ui.bindNextButton(() => this.next());
         this.ui.bindCancelButton(() => this.cancel());
         this.ui.bindStepButtons((stepIndex) => this.goToStep(stepIndex));
+    }
+
+    async getData() {
+        if (this.formCompleted)
+            return this.data;
+
+        return await this.formCompletedPromise;
     }
 
     add(title, formFields) {
@@ -45,8 +56,9 @@ export class Stepper {
             this.maxStepReached = Math.max(this.maxStepReached, this.currentStep);
             this.updateUI();
         } else {
-            console.log('Form Data:', this.data);
             alert('Form submitted!');
+            this.formCompleted = true;
+            this.resolveForm(this.data);
         }
     }
 
