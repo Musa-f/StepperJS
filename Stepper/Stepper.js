@@ -71,6 +71,11 @@ export class Stepper {
     }   
 
     goToStep(stepIndex) {
+        if (!this.validateStep()) {
+            this.ui.showMessage('Please fill all required fields in the current step before changing tabs.');
+            return;
+        }
+
         if (stepIndex <= this.maxStepReached) {
             this.saveData();
             this.currentStep = stepIndex;

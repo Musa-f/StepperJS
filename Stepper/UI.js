@@ -1,16 +1,16 @@
 export class UI {
     constructor(container) {
         this.container = container;
-        this.messageBox = this.createMessageBox();
         this.header = this.createHeader();
         this.body = this.createBody();
         this.footer = this.createFooter();
+        this.messageBox = this.createMessageBox();
     }
 
     createMessageBox() {
         const messageBox = document.createElement('div');
         messageBox.classList.add('stepper-message');
-        this.container.appendChild(messageBox);
+        this.container.insertBefore(messageBox, this.footer);
         return messageBox;
     }
 
@@ -56,12 +56,15 @@ export class UI {
     updateStepStatus(currentStep, maxStepReached) {
         this.header.querySelectorAll('.step').forEach((step, index) => {
             const stepIndex = parseInt(step.dataset.step);
-            
-            step.classList.remove('step-active');
-            step.classList.remove('step-done');
+            step.classList.remove('step-active', 'step-done');
+            const hasCheckmark = step.innerText.startsWith('✓ ');
             
             if (stepIndex <= maxStepReached && stepIndex !== currentStep) {
                 step.classList.add('step-done');
+
+                if (!hasCheckmark) {
+                    step.innerText = '✓ ' + step.innerText;
+                }
             }
             
             if (stepIndex === currentStep) {
