@@ -1,3 +1,20 @@
+:root {
+    --color-primary: #6E94CF;
+    --color-secondary: #d2e0f7;
+    --color-text: #889bbb;
+    --color-active-bg: #6E94CF;
+    --color-active-text: #28487B;
+    --color-done-hover: #abbcd6;
+    --color-done-text: white;
+    --color-border: #cbd5e1;
+    --color-focus: #5c80b6;
+    --color-cancel-bg: #b9cdee;
+    --color-next-bg: #28487B;
+    --color-next-text: #ffffff;
+    --color-label: #6b7280;
+    --color-error: rgb(189, 34, 34);
+}
+
 #stepper-container {
     width: 60%;
     background: white;
@@ -21,26 +38,27 @@
     font-weight: bold;
     border-radius: 5px;
     clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 10% 50%);
-    background-color: #d2e0f7;
-    color: #889bbb;
+    background-color: var(--color-secondary);
+    color: var(--color-text);
     border: none;
 }
 
 .step:first-child {
     clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);
 }
+
 .step:last-child {
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 10% 50%);
 }
 
 .stepper-header .step-active {
-    background-color: #6E94CF; 
-    color: #28487B;
+    background-color: var(--color-active-bg);
+    color: var(--color-active-text);
 }
 
 .step.step-done:hover {
-    background-color: #abbcd6;
-    color: white;
+    background-color: var(--color-done-hover);
+    color: var(--color-done-text);
     cursor: pointer;
 }
 
@@ -67,7 +85,7 @@
     left: 10px;
     background: white;
     padding: 0 5px;
-    color: #6b7280;
+    color: var(--color-label);
     font-size: 12px;
 }
 
@@ -76,7 +94,7 @@
 .stepper-body select {
     width: 100%;
     padding: 10px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--color-border);
     border-radius: 5px;
     outline: none;
     transition: 0.3s;
@@ -87,16 +105,16 @@
 .stepper-body input:focus,
 .stepper-body textarea:focus,
 .stepper-body select:focus {
-    border-color: #5c80b6;
+    border-color: var(--color-focus);
 }
 
 .stepper-body textarea {
-    resize: vertical; 
+    resize: vertical;
     min-height: 100px;
 }
 
 .stepper-body select {
-    appearance: none; 
+    appearance: none;
     background-color: white;
     cursor: pointer;
 }
@@ -117,16 +135,16 @@
 }
 
 .stepper-footer .btn-cancel {
-    background: #b9cdee;
-    color: #28487B;
+    background: var(--color-cancel-bg);
+    color: var(--color-active-text);
 }
 
 .btn-next {
-    background: #28487B;
-    color: #ffffff;
+    background: var(--color-next-bg);
+    color: var(--color-next-text);
 }
 
 .form-message {
     margin: 10px 0px;
-    color: rgb(189, 34, 34);
+    color: var(--color-error);
 }
