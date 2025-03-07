@@ -1,8 +1,10 @@
 # StepperJS
 
-StepperJS is a modular tool that allows you to complete a multi-step form. This form is fully customizable—you can create as many steps as needed and modify the CSS to fit your design.
+**StepperJS** is a modular tool that allows you to complete a multi-step form. This form is fully customizable—you can create as many steps as needed and modify the CSS to fit your design.
 
 You can also retrieve all form data upon submission for further processing.
+
+![Example](./capture.png)
 
 ## Usage
 
@@ -56,7 +58,7 @@ If the input type is select, you need to specify the available choices:
 ```
 
 ### 4. Retrieve form data
-Use stepper.getData() to collect all form data upon submission.
+Use `stepper.getData()` to collect all form data upon submission.
 
 
 ## Styling Variables
