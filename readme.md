@@ -4,7 +4,7 @@
 
 You can also retrieve all form data upon submission for further processing.
 
-![Example](./capture.png)
+![Example](./example.png)
 
 ## Usage
 
